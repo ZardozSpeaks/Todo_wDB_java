@@ -1,0 +1,11 @@
+<h1>Success!</h1>
+
+#if ($task)
+Your task has been saved.
+
+<a href="/tasks"><button type="button" id="back">View tasks</button></a>
+#elseif ($category)
+Your category has been saved.
+
+<a href="/categories"><button type="button" id="back">View categories</button></a>
+#end
