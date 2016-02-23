@@ -10,3 +10,16 @@
 
   <button type="submit" class="btn btn-success">Add a new Task</button>
 </form>
+
+<div class="list-field">
+  <ul>
+  #foreach ($task in $tasks)
+    <li><a href="/tasks/$task.getId()">$task.getDescription()</a></li>
+  #end
+  </ul>
+</div>
+<a href="/categories"><button class=".btn">View category list</button></a>
+<form action="/" method="post">
+<input id="categoryId2" name="categoryId2" type="hidden" value="$category.getId()">
+<button class="btn">Delete category</button>
+</form>

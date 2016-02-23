@@ -1,8 +1,14 @@
 #if ($task)
   <h1>$task.getDescription()</h1>
+
+  <form action="/categories/$task.getCategoryId()" method="post">
+    <input type="hidden" name="taskId" value="$task.getId()">
+    <input type="checkbox" name="completed" value="completed"> Task completed</></br>
+    <button class="btn" type="submit">Confirm</button>
+  </form>
 #else
   <h1> Task not found </h1>
 #end
 
-<a href="/tasks/new">Add another task</a>
-<a href="/tasks">All tasks</a>
+<a href="/categories/$task.getCategoryId()">Add another task</a>
+<a href="/categories/$task.getCategoryId()">All tasks</a>
