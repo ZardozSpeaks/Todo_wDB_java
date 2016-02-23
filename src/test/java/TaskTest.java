@@ -1,6 +1,7 @@
 import org.junit.*;
 import static org.junit.Assert.*;
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import org.sql2o.*;
 
 public class TaskTest {
@@ -115,9 +116,47 @@ public class TaskTest {
   }
 
   @Test
-  public void clear_emptiesAllTasksFromArrayList() {
-    Task myTask = new Task("Mow the lawn", 1);
-    Task.clear();
-    assertEquals(Task.all().size(), 0);
+  public void addDueDate_addsDueDatePropertyToTask(){
+    Task firstTask = new Task("Mow the lawn", 1);
+    firstTask.addDueDate("2016-02-25");
+    assertEquals(firstTask.getDueDate(), LocalDate.parse("2016-02-25"));
   }
+
+  @Test
+  public void save_savesTaskWithUpdatedDueDateProperty_true(){
+    Task firstTask = new Task("Mow the lawn", 1);
+    firstTask.addDueDate("2016-02-25");
+    firstTask.save();
+    Task savedTask = Task.find(firstTask.getId());
+    assertEquals(savedTask, firstTask);
+  }
+
+  // @Test
+  // public void crazytest(){
+  //   Task firstTask = new Task("Mow the lawn", 1);
+  //   firstTask.addDueDate("2016-02-25");
+  //   firstTask.save();
+  //
+  //   Task secondTask = new Task("Dishes", 1);
+  //   firstTask.addDueDate("2016-02-26");
+  //   firstTask.save();
+  //
+  //   Task thirdTask = new Task("Dog poop", 1);
+  //   firstTask.addDueDate("2016-02-27");
+  //   firstTask.save();
+  //
+  //   assertEquals(Task.all().get(0).getDescription(), "Mow the lawn");
+  //
+  //
+  // }
+
+
+
+
+  // @Test
+  // public void clear_emptiesAllTasksFromArrayList() {
+  //   Task myTask = new Task("Mow the lawn", 1);
+  //   Task.clear();
+  //   assertEquals(Task.all().size(), 0);
+  // }
 }

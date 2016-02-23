@@ -1,4 +1,5 @@
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.*;
@@ -53,17 +54,25 @@ public class Task {
     }
   }
 
-  private static ArrayList<Task> instances = new ArrayList<Task>();
-
   private String description;
   // private LocalDateTime mCreatedAt;
   // private boolean mCompleted;
   private int categoryId;
   private int id;
+  private LocalDate dueDate;
+
+  public void addDueDate(String dueDate) {
+    this.dueDate = LocalDate.parse(dueDate);
+  }
+
+  public LocalDate getDueDate(){
+    return dueDate;
+  }
 
   public Task(String description, int categoryId) {
     this.description = description;
     this.categoryId = categoryId;
+    this.dueDate = null;
     // mCreatedAt = LocalDateTime.now();
     // mCompleted = false;
     // instances.add(this);
@@ -95,13 +104,11 @@ public class Task {
   // }
 
   public static List<Task> all() {
-    String sql = "SELECT id, description, categoryId FROM Tasks";
+    String sql = "SELECT id, description, categoryId FROM Tasks ORDER BY duedate DESC;";
     try(Connection con = DB.sql2o.open()) {
       return con.createQuery(sql).executeAndFetch(Task.class);
     }
   }
 
-  public static void clear() {
-    instances.clear();
-  }
+
 }
