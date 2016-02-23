@@ -73,18 +73,6 @@ public class TaskTest {
    assertEquals("Mow the lawn", myTask.getDescription());
  }
 
- // @Test
- // public void isCompleted_isFalseAfterInstansiation_false() {
- //   Task myTask = new Task("Mow the lawn");
- //   assertEquals(false, myTask.isCompleted());
- // }
-
- //  @Test
- //  public void getCreatedAt_instantiatesWithCurrentTime_today() {
- //    Task myTask = new Task("Mow the lawn");
- //    assertEquals(LocalDateTime.now().getDayOfWeek(), myTask.getCreatedAt().getDayOfWeek());
- // }
-
  @Test
  public void all_returnsAllInstancesOfTask_true() {
     Task firstTask = new Task("Mow the lawn", 1);
@@ -130,33 +118,4 @@ public class TaskTest {
     Task savedTask = Task.find(firstTask.getId());
     assertEquals(savedTask, firstTask);
   }
-
-  // @Test
-  // public void crazytest(){
-  //   Task firstTask = new Task("Mow the lawn", 1);
-  //   firstTask.addDueDate("2016-02-25");
-  //   firstTask.save();
-  //
-  //   Task secondTask = new Task("Dishes", 1);
-  //   firstTask.addDueDate("2016-02-26");
-  //   firstTask.save();
-  //
-  //   Task thirdTask = new Task("Dog poop", 1);
-  //   firstTask.addDueDate("2016-02-27");
-  //   firstTask.save();
-  //
-  //   assertEquals(Task.all().get(0).getDescription(), "Mow the lawn");
-  //
-  //
-  // }
-
-
-
-
-  // @Test
-  // public void clear_emptiesAllTasksFromArrayList() {
-  //   Task myTask = new Task("Mow the lawn", 1);
-  //   Task.clear();
-  //   assertEquals(Task.all().size(), 0);
-  // }
 }

@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.*;
 
@@ -28,11 +27,23 @@ public class Category {
     return id;
   }
 
-
-  public static List<Category> all(){
-    String sql = "SELECT id, name FROM Categories";
+  public void save() {
     try(Connection con = DB.sql2o.open()) {
-      return con.createQuery(sql).executeAndFetch(Category.class);
+      String sql = "INSERT INTO Categories(name) VALUES (:name);";
+      this.id = (int) con.createQuery(sql, true)
+      .addParameter("name", this.name)
+      .executeUpdate()
+      .getKey();
+    }
+  }
+
+  public static Category find(int id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM Categories where id=:id;";
+      Category category = con.createQuery(sql)
+      .addParameter("id", id)
+      .executeAndFetchFirst(Category.class);
+      return category;
     }
   }
 
@@ -45,31 +56,10 @@ public class Category {
     }
   }
 
-  public void save() {
+  public static List<Category> all(){
+    String sql = "SELECT id, name FROM Categories";
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO Categories(name) VALUES (:name);";
-      this.id = (int) con.createQuery(sql, true).addParameter("name", this.name).executeUpdate().getKey();
+      return con.createQuery(sql).executeAndFetch(Category.class);
     }
   }
-
-  // public static Category find(int id) {
-  //   try {
-  //     return instances.get(id - 1);
-  //   } catch (IndexOutOfBoundsException e) {
-  //     return null;
-  //   }
-  // }
-
-
-  public static Category find(int id) {
-    try(Connection con = DB.sql2o.open()) {
-      String sql = "SELECT * FROM Categories where id=:id;";
-      Category category = con.createQuery(sql).addParameter("id", id).executeAndFetchFirst(Category.class);
-      return category;
-    }
-  }
-
-  // public static void clear() {
-  //   instances.clear();
-  // }
 }

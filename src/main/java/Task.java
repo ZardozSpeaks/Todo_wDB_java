@@ -1,10 +1,14 @@
-import java.time.LocalDateTime;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import org.sql2o.*;
 
 public class Task {
+
+  private String description;
+  // private boolean mCompleted;
+  private int categoryId;
+  private int id;
+  private LocalDate dueDate;
 
   @Override
   public boolean equals(Object otherTask){
@@ -20,10 +24,50 @@ public class Task {
     }
   }
 
+  public Task(String description, int categoryId) {
+    this.description = description;
+    this.categoryId = categoryId;
+    this.dueDate = null;
+    // mCompleted = false;
+  }
+
+  public void addDueDate(String dueDate) {
+    this.dueDate = LocalDate.parse(dueDate);
+  }
+
+
+  public String getDescription() {
+    return description;
+  }
+
+  // public boolean isCompleted() {
+  //   return mCompleted;
+  // }
+
+  public int getId() {
+    return id;
+  }
+
+  public int getCategoryId(){
+    return categoryId;
+  }
+
+  public LocalDate getDueDate(){
+    return dueDate;
+  }
+
+  // public void completeTask() {
+  //   mCompleted = true;
+  // }
+
   public void save() {
   try(Connection con = DB.sql2o.open()) {
     String sql = "INSERT INTO tasks(description, categoryId) VALUES (:description, :categoryId)";
-    this.id = (int) con.createQuery(sql, true).addParameter("description", this.description).addParameter("categoryId", this.categoryId).executeUpdate().getKey();
+    this.id = (int) con.createQuery(sql,true)
+    .addParameter("description", this.description)
+    .addParameter("categoryId", this.categoryId)
+    .executeUpdate()
+    .getKey();
     }
   }
 
@@ -54,61 +98,11 @@ public class Task {
     }
   }
 
-  private String description;
-  // private LocalDateTime mCreatedAt;
-  // private boolean mCompleted;
-  private int categoryId;
-  private int id;
-  private LocalDate dueDate;
-
-  public void addDueDate(String dueDate) {
-    this.dueDate = LocalDate.parse(dueDate);
-  }
-
-  public LocalDate getDueDate(){
-    return dueDate;
-  }
-
-  public Task(String description, int categoryId) {
-    this.description = description;
-    this.categoryId = categoryId;
-    this.dueDate = null;
-    // mCreatedAt = LocalDateTime.now();
-    // mCompleted = false;
-    // instances.add(this);
-    // mId = instances.size();
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  // public boolean isCompleted() {
-  //   return mCompleted;
-  // }
-
-  // public LocalDateTime getCreatedAt() {
-  //   return mCreatedAt;
-  // }
-
-  public int getId() {
-    return id;
-  }
-
-  public int getCategoryId(){
-    return categoryId;
-  }
-
-  // public void completeTask() {
-  //   mCompleted = true;
-  // }
-
   public static List<Task> all() {
     String sql = "SELECT id, description, categoryId FROM Tasks ORDER BY duedate DESC;";
     try(Connection con = DB.sql2o.open()) {
-      return con.createQuery(sql).executeAndFetch(Task.class);
+      return con.createQuery(sql)
+      .executeAndFetch(Task.class);
     }
   }
-
-
 }

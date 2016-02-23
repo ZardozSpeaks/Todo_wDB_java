@@ -62,12 +62,6 @@ public class CategoryTest {
   }
 
   @Test
-  public void getTasks_initiallyReturnsEmptyArrayList() {
-    Category testCategory = new Category("Home");
-    assertTrue(testCategory.getTasks() instanceof ArrayList);
-  }
-
-  @Test
   public void all_returnsAllInstancesOfTask_true() {
     Category firstCategory = new Category("Home");
     Category secondCategory = new Category("Home");
