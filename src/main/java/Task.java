@@ -7,9 +7,9 @@ import org.sql2o.*;
 public class Task {
 
   private String description;
-  // private boolean mCompleted;
+  private boolean completed;
   private int id;
-  private LocalDate dueDate;
+  private LocalDate due_date;
 
   @Override
   public boolean equals(Object otherTask){
@@ -24,8 +24,8 @@ public class Task {
 
   public Task(String description) {
     this.description = description;
-    this.dueDate = null;
-    // mCompleted = false;
+    this.due_date = null;
+    this.completed = false;
   }
 
 
@@ -44,18 +44,19 @@ public class Task {
     return dueDate;
   }
 
-  // public boolean isCompleted() {
-  //   return mCompleted;
-  // }
+  public boolean isCompleted() {
+    return completed;
+  }
 
   //SETTER METHODS//
 
   public void addDueDate(String dueDate) {
     this.dueDate = LocalDate.parse(dueDate);
   }
-  // public void completeTask() {
-  //   mCompleted = true;
-  // }
+
+  public void completeTask() {
+    completed = true;
+  }
 
   public void save() {
   try(Connection con = DB.sql2o.open()) {
@@ -99,7 +100,7 @@ public class Task {
   //UPDATE
   public void update(String description) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE tasks SET description = :description) WHERE id = :id";
+      String sql = "UPDATE tasks SET description = :description WHERE id = :id";
       con.createQuery(sql)
         .addParameter("description", description)
         .addParameter("id", id)
@@ -128,6 +129,16 @@ public class Task {
       con.createQuery(joinDeleteQuery)
         .addParameter("taskId", this.getId())
         .executeUpdate();
+    }
+  }
+
+  public void deleteFromCategory(int categoryId) {
+    try(Connection con = DB.sql2o.open()) {
+      String joinDeleteQuery = "DELETE FROM categories_tasks WHERE task_Id = :taskId AND category_Id = :categoryId";
+      con.createQuery(joinDeleteQuery)
+      .addParameter("taskId", this.getId())
+      .addParameter("categoryId", categoryId)
+      .executeUpdate();
     }
   }
 

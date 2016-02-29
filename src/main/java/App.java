@@ -45,6 +45,15 @@ public class App {
       return null;
     });
 
+    get("/tasks/:id/edit", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int id = Integer.parseInt(request.params("id"));
+      Task task = Task.find(id);
+      model.put("task", task);
+      model.put("template", "templates/task-edit.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
     get("/tasks/:id", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
       int id = Integer.parseInt(request.params("id"));
@@ -55,19 +64,26 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-    put("/tasks/:id", (request, response) -> {
+    post("/tasks/:id", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
-      Task task = Task.find(Integer.parseInt(request.params("id")));
+      int id = Integer.parseInt(request.params("id"));
+      Task task = Task.find(id);
       String description = request.queryParams("description");
-      task.update("description");
+      task.update(description);
+      model.put("task", Task.find(id));
+      model.put("allCategories", Category.all());
       model.put("template", "templates/task.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
-    delete("/tasks/:id", (request, response) -> {
+    post("/tasks/:id/delete", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
-      Task task = Task.find(Integer.parseInt(request.params("id")));
-      task.delete();
+      int categoryId = Integer.parseInt(request.queryParams("category_id"));
+      int id = Integer.parseInt(request.params("id"));
+      Task task = Task.find(id);
+      task.deleteFromCategory(categoryId);
+      model.put("allCategories", Category.all());
+      model.put("task", task);
       model.put("template", "templates/task.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -92,14 +108,6 @@ public class App {
       return null;
     });
 
-    post("/", (request, response) -> {
-      HashMap<String, Object> model = new HashMap<String, Object>();
-      Category category = Category.find(Integer.parseInt(request.queryParams("categoryId2")));
-      category.delete();
-      model.put("template", "templates/index.vtl");
-      return new ModelAndView(model, layout);
-      }, new VelocityTemplateEngine());
-
     post("/categories", (request, response) -> {
       HashMap<String, Object> model = new HashMap<String, Object>();
       String name = request.queryParams("name");
@@ -116,6 +124,40 @@ public class App {
       model.put("category", category);
       model.put("allTasks", Task.all());
       model.put("template", "templates/category.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/categories/:id", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int id = Integer.parseInt(request.params("id"));
+      Category category = Category.find(id);
+      String name = request.queryParams("name");
+      category.update(name);
+      model.put("category", Category.find(id));
+      model.put("allTasks", Task.all());
+      model.put("template", "templates/category.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/categories/:id/delete", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int taskId = Integer.parseInt(request.queryParams("task_id"));
+      int id = Integer.parseInt(request.params("id"));
+      Category category = Category.find(id);
+      Task task = Task.find(taskId);
+      task.delete();
+      model.put("category", category);
+      model.put("allTasks", Task.all());
+      model.put("template", "templates/category.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/categories/:id/edit", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int id = Integer.parseInt(request.params("id"));
+      Category category = Category.find(id);
+      model.put("category", category);
+      model.put("template", "templates/category-edit.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
   }

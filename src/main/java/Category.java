@@ -53,6 +53,16 @@ public class Category {
     }
   }
 
+  public void update(String name) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE categories SET name = :name WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("name", name)
+        .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
   //READ//
 
   public ArrayList<Task> getTasks() {

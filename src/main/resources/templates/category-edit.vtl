@@ -1,0 +1,10 @@
+<h2>$category.getName()</h2>
+
+<h4>Rename $category.getName():</h4>
+
+<form action="/categories/$category.getId()" method="post">
+  <div class="form-group">
+    <input required value="$category.getName()" type="text" class="form-control" name="name" id="name">
+  </div>
+  <button id="submit-category" type="submit" class="btn btn-info">Submit</button>
+</form>

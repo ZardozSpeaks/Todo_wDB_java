@@ -1,0 +1,10 @@
+<h2>$task.getDescription()</h2>
+
+<h4>Edit $task.getDescription() details:</h4>
+
+<form action="/tasks/$task.getId()" method="post">
+  <div class="form-group">
+    <input required value="$task.getDescription()" type="text" class="form-control" name="description" id="description">
+  </div>
+  <button id="submit-task" type="submit" class="btn btn-info">Submit</button>
+</form>
