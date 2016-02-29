@@ -38,18 +38,6 @@ public class CategoryTest {
   }
 
   @Test
-  public void getTasks_retrievesALlTasksFromDatabase_tasksList() {
-    Category myCategory = new Category("Household chores");
-    myCategory.save();
-    Task firstTask = new Task("Mow the lawn", myCategory.getId());
-    firstTask.save();
-    Task secondTask = new Task("Do the dishes", myCategory.getId());
-    secondTask.save();
-    Task[] tasks = new Task[] { firstTask, secondTask };
-    assertTrue(myCategory.getTasks().containsAll(Arrays.asList(tasks)));
-  }
-
-  @Test
   public void getName_returnsName_true() {
     Category testCategory = new Category("Home");
     assertEquals("Home", testCategory.getName());
@@ -69,5 +57,44 @@ public class CategoryTest {
     secondCategory.save();
     assertTrue(Category.all().contains(firstCategory));
     assertTrue(Category.all().contains(secondCategory));
+  }
+
+  @Test
+  public void addTask_addsTaskToCategory() {
+    Category myCategory = new Category("Household chores");
+    myCategory.save();
+
+    Task myTask = new Task("Mow the lawn");
+    myTask.save();
+
+    myCategory.addTask(myTask);
+    Task savedTask = myCategory.getTasks().get(0);
+    assertTrue(myTask.equals(savedTask));
+  }
+
+  @Test
+  public void getTasks_returnsAllTasks_ArrayList() {
+    Category myCategory = new Category("Household chores");
+    myCategory.save();
+
+    Task myTask = new Task("Mow the lawn");
+    myTask.save();
+
+    myCategory.addTask(myTask);
+    List savedTasks = myCategory.getTasks();
+    assertEquals(savedTasks.size(), 1);
+  }
+
+  @Test
+  public void delete_deletesAllTasksAndListsAssociations() {
+    Category myCategory = new Category("Household chores");
+    myCategory.save();
+
+    Task myTask = new Task("Mow the lawn");
+    myTask.save();
+
+    myCategory.addTask(myTask);
+    myCategory.delete();
+    assertEquals(myTask.getCategories().size(), 0);
   }
 }
