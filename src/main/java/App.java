@@ -88,6 +88,18 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    post("/tasks/:id/completed", (request, response) -> {
+      HashMap<String, Object> model = new HashMap<String, Object>();
+      int id = Integer.parseInt(request.params("id"));
+      Task task = Task.find(id);
+      task.setComplete();
+      model.put("allCategories", Category.all());
+      model.put("task", task);
+      model.put("template", "templates/task.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+
 //CATEGORY ROUTES//
 
     get("/categories", (request, response) -> {

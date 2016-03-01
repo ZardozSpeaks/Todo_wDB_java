@@ -1,5 +1,10 @@
 <h1>$task.getDescription()</h1>
 
+<form action="/tasks/task.getId()/completed" method="post">
+   <input type="checkbox" name="completed" value="$task.completeTask()"> Task Complete?
+   <input type="submit" value="Submit">
+</form>
+
 #if($task.getCategories())
   <p>Here are the categories for this task:</p>
   <ul>

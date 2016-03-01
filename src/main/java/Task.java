@@ -24,7 +24,7 @@ public class Task {
 
   public Task(String description) {
     this.description = description;
-    this.due_date = null;
+    // this.due_date = null;
     this.completed = false;
   }
 
@@ -40,9 +40,9 @@ public class Task {
     return id;
   }
 
-  public LocalDate getDueDate(){
-    return dueDate;
-  }
+  // public LocalDate getDueDate(){
+  //   return dueDate;
+  // }
 
   public boolean isCompleted() {
     return completed;
@@ -50,12 +50,16 @@ public class Task {
 
   //SETTER METHODS//
 
-  public void addDueDate(String dueDate) {
-    this.dueDate = LocalDate.parse(dueDate);
-  }
+  // public void addDueDate(String dueDate) {
+  //   this.dueDate = LocalDate.parse(dueDate);
+  // }
 
   public void completeTask() {
-    completed = true;
+    if(this.isCompleted()) {
+      this.completed = false;
+    } else {
+      this.completed = true;
+    }
   }
 
   public void save() {
@@ -104,6 +108,16 @@ public class Task {
       con.createQuery(sql)
         .addParameter("description", description)
         .addParameter("id", id)
+        .executeUpdate();
+    }
+  }
+
+  public void setComplete() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE tasks SET completed = :completed WHERE id = :id";
+      con.createQuery(sql)
+        .addParameter("completed", this.completed)
+        .addParameter("id", this.id)
         .executeUpdate();
     }
   }
